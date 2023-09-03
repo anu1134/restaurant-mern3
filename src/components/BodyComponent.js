@@ -1,6 +1,6 @@
 import RestaurantCard from "./RestaurantCard";
 import SearchComponent from "./Search";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const restaurantDetails = [
   {
@@ -36,21 +36,39 @@ const restaurantDetails = [
 ];
 
 const BodyComponent = () => {
-  const [allRestaurants, setAllRestaurants] = useState(restaurantDetails);
+  const [allRestaurants, setAllRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
   function updateRestaurants(filteredRestaurants) {
-    setAllRestaurants(filteredRestaurants);
-
-    console.log("restaurants....", allRestaurants);
+    setFilteredRestaurants(filteredRestaurants);
   }
+
+  useEffect(() => {
+    getRestaurants();
+  }, []);
+
+  function getRestaurants() {
+    console.log("fetching restaurants");
+
+    setAllRestaurants(restaurantDetails);
+    setFilteredRestaurants(restaurantDetails);
+
+    /*  fetch("http://localhost:8000")
+      .then((res) => res.json())
+      .then((response) => {
+        setAllRestaurants(response.resturant);
+        setFilteredRestaurants(response.resturant);
+      }); */
+  }
+
   return (
     <>
       <SearchComponent
-        restaurants={restaurantDetails}
+        restaurants={allRestaurants}
         updateRestaurants={updateRestaurants}
       />
       <div className="res-container">
-        {allRestaurants.map((res) => {
+        {filteredRestaurants.map((res) => {
           return <RestaurantCard key={res.id} res_details={res} />;
         })}
       </div>

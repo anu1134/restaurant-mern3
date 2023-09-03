@@ -21,6 +21,7 @@ const SearchComponent = (props) => {
         type="text"
         onChange={(e) => {
           searchText = e.target.value;
+          filterRestaurants(searchText);
         }}
       ></input>
       <button onClick={(e) => filterRestaurants(searchText)}>Search</button>
