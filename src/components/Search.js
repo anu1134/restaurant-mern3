@@ -1,5 +1,7 @@
+import { useState } from "react";
+
 const SearchComponent = (props) => {
-  let searchText = "";
+  const [searchText, setSearchText] = useState("");
 
   function filterRestaurants(searchText) {
     console.log("restaurants", props.restaurants);
@@ -10,9 +12,9 @@ const SearchComponent = (props) => {
       res.name.toLowerCase().includes(searchText.toLowerCase())
     );
 
-    props.updateRestaurants(filteredRestaurants);
-
     console.log("filteredRestaurants", filteredRestaurants);
+
+    props.updateRestaurants(filteredRestaurants);
   }
 
   return (
@@ -20,7 +22,7 @@ const SearchComponent = (props) => {
       <input
         type="text"
         onChange={(e) => {
-          searchText = e.target.value;
+          setSearchText(e.target.value);
           filterRestaurants(searchText);
         }}
       ></input>

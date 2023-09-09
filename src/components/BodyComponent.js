@@ -1,12 +1,14 @@
 import RestaurantCard from "./RestaurantCard";
 import SearchComponent from "./Search";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Shimmer from "./Shimmer";
 
 const restaurantDetails = [
   {
     id: "1",
     name: "Bhatura Co",
-    avgRating: "4.3",
+    avgRating: "3.3",
     cuisines: ["Fast Food, Beverages"],
   },
   {
@@ -24,7 +26,7 @@ const restaurantDetails = [
   {
     id: "4",
     name: "Oye Yummy Paratha",
-    avgRating: "4.3",
+    avgRating: "4.0",
     cuisines: ["Fast Food, Beverages"],
   },
   {
@@ -40,6 +42,7 @@ const BodyComponent = () => {
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
   function updateRestaurants(filteredRestaurants) {
+    console.log("list of filetred", filteredRestaurants);
     setFilteredRestaurants(filteredRestaurants);
   }
 
@@ -50,28 +53,55 @@ const BodyComponent = () => {
   function getRestaurants() {
     console.log("fetching restaurants");
 
-    setAllRestaurants(restaurantDetails);
-    setFilteredRestaurants(restaurantDetails);
+    //setAllRestaurants(restaurantDetails);
+    //setFilteredRestaurants(restaurantDetails);
 
-    /*  fetch("http://localhost:8000")
-      .then((res) => res.json())
-      .then((response) => {
-        setAllRestaurants(response.resturant);
-        setFilteredRestaurants(response.resturant);
-      }); */
+    setTimeout(() => {
+      fetch("http://localhost:8000")
+        .then((res) => res.json())
+        .then((response) => {
+          setAllRestaurants(response.resturant);
+          setFilteredRestaurants(response.resturant);
+        });
+    }, 5000);
+  }
+
+  function filterTopRatedRestaurants() {
+    const topRatedRest = filteredRestaurants.filter(
+      (restaurant) => restaurant.avgRating > 4.0
+    );
+
+    setFilteredRestaurants(topRatedRest);
   }
 
   return (
     <>
-      <SearchComponent
-        restaurants={allRestaurants}
-        updateRestaurants={updateRestaurants}
-      />
-      <div className="res-container">
-        {filteredRestaurants.map((res) => {
-          return <RestaurantCard key={res.id} res_details={res} />;
-        })}
+      <div className="filter-bar">
+        <SearchComponent
+          restaurants={allRestaurants}
+          updateRestaurants={updateRestaurants}
+        />
+        <button
+          className="top-rated-restaurants"
+          onClick={filterTopRatedRestaurants}
+        >
+          Top Rated Restaurants
+        </button>
       </div>
+
+      {filteredRestaurants.length === 0 ? (
+        <Shimmer />
+      ) : (
+        <div className="res-container">
+          {filteredRestaurants.map((res) => {
+            return (
+              <Link to={`restaurant/${res.id}`} key={res.id}>
+                <RestaurantCard key={res.id} res_details={res} />
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 };

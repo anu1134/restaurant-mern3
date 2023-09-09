@@ -19,6 +19,10 @@
   margin: 10px;
 }
 
+.nav-items > ul > a {
+  margin: 10px;
+}
+
 .search {
   margin: 10px;
 }
@@ -44,4 +48,27 @@
 .res-container {
   display: flex;
   flex-wrap: wrap;
+}
+
+.filter-bar {
+  display: flex;
+}
+
+.top-rated-restaurants {
+  margin: 10px;
+}
+
+.restaurant-details {
+  display: flex;
+}
+
+.rest-menu-list {
+  margin: 50px;
+}
+
+.shimmer-card {
+  width: 350px;
+  height: 450px;
+  margin: 10px;
+  background-color: lightgray;
 }
