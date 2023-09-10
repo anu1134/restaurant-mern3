@@ -3,6 +3,7 @@ import SearchComponent from "./Search";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Shimmer from "./Shimmer";
+import { useOnline } from "../common/useOnline";
 
 const restaurantDetails = [
   {
@@ -50,6 +51,12 @@ const BodyComponent = () => {
     getRestaurants();
   }, []);
 
+  const isOnline = useOnline();
+
+  if (!isOnline) {
+    return <h1>Offline, Please check your Internet Connection</h1>;
+  }
+
   function getRestaurants() {
     console.log("fetching restaurants");
 
@@ -63,7 +70,7 @@ const BodyComponent = () => {
           setAllRestaurants(response.resturant);
           setFilteredRestaurants(response.resturant);
         });
-    }, 5000);
+    }, 1000);
   }
 
   function filterTopRatedRestaurants() {
